@@ -14,14 +14,15 @@ void Motor::begin(){
     pinMode(ENA, OUTPUT);
 }
 
-void Motor::forward(uint8_t speed){
-    digitalWrite(IN1, LOW);
-    digitalWrite(IN2, HIGH);
-    analogWrite(ENA, speed);
+void Motor::drive(int speed){
+    if(speed>0){
+        digitalWrite(IN1, HIGH);
+        digitalWrite(IN2, LOW);
+        analogWrite(ENA,speed);
+    }else{
+        digitalWrite(IN1, LOW);
+        digitalWrite(IN2, HIGH);
+        analogWrite(ENA, -1*speed);
+    }
 }
 
-void Motor::backward(uint8_t speed){
-    digitalWrite(IN1, HIGH);
-    digitalWrite(IN2, LOW);
-    analogWrite(ENA,speed);
-}

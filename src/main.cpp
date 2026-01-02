@@ -1,22 +1,44 @@
 #include <Arduino.h>
 #include "Motor.h"
 #include "PID.h"
+#include "Drive.h"
 
-Encoder encoder(3,5);
-Motor motor(8,9,11);
-PID right(1.0, 0.0, 0.0);
+Encoder Rencoder(3,5);
+Motor Rmotor(8,9,11);
+Encoder Lencoder(2,4);
+Motor Lmotor(6,7,10);
+PID right(0.1, 0.999, 0.0);
+PID left(0.1, 1.03, 0.0);
+uint8_t buttonState;
+
+Drive drive(left, right, Lmotor, Rmotor, Lencoder, Rencoder);
 
 
 void setup() {
-  motor.begin();
+  Serial.begin(9600);
+  Rmotor.begin();
+  Lmotor.begin();
+  pinMode(12, INPUT);
 }
 
 void loop() {
-  unsigned long timer = millis();
-  if(timer < 10000){
-    right.output(encoder, motor, 400);
+  buttonState = digitalRead(12);
+  bool runState = false;
+  if(buttonState == HIGH){
+    runState = true;
+    Serial.print("button pressed");
   }else{
-    motor.forward(0);
+    runState = false;
+  }
+
+  if(runState){
+    drive.driveDistance(500,100);
+    drive.turnR(100);
+    drive.driveDistance(500,100);
+    delay(5000);
+    drive.stop();
+    while(1);
+    runState = false;
   }
 }
 

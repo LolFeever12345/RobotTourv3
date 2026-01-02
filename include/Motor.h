@@ -9,8 +9,7 @@ class Motor{
         Motor(uint8_t in1, uint8_t in2, uint8_t ena);
         float distance();
         long output();
-        void forward(uint8_t PWM);
-        void backward(uint8_t PWM);
+        void drive(int PWM);
         void begin();
         void movePID(Encoder enc);
 

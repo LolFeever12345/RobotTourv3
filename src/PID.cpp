@@ -7,24 +7,16 @@ PID::PID(float Kp, float Ki, float Kd){
     this->Kp = Kp;
     this->Ki = Ki;
     this->Kd = Kd;
+    aSpeed = 0.0;
 }
 
-void PID::test(Encoder& encoder, Motor& motor){
-    motor.forward(255);
-    Serial.println(encoder.read());
-}
 
-void PID::output(Encoder& enc, Motor& motor, int speed){
-    unsigned long now = millis();
-    float dt = (now-prevTime)/1000;
-    if(dt<0.001f)return;
-    prevTime = now;
-
+int PID::output(Encoder& enc, int speed, float dt){
     float currDistance = enc.read()*MPC;
     float deltaDistance = currDistance - prevDistance;
     prevDistance = currDistance;
     float currSpeed = deltaDistance/dt;
-    float error = currSpeed - speed*1.0;
+    float error = speed*1.0-currSpeed;
 
     integral += error*dt;
 
@@ -34,12 +26,13 @@ void PID::output(Encoder& enc, Motor& motor, int speed){
     float output = Kp*error + Ki*integral + Kd*derivative;
     output = constrain(output, -255.f, 255.f);
 
-    if(output<0){
-        motor.backward((uint8_t)abs(output));
-    }else{
-        motor.forward((uint8_t)(output));
-    }
+    aSpeed = currSpeed;
 
-    Serial.print(now);Serial.print(",");Serial.print(currSpeed);Serial.print(",");Serial.println(output);
+    return output;
+}
 
+void PID::reset(){
+    prevTime = 0;
+    integral = 0.f;
+    prevDistance = 0.f;
 }
