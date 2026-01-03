@@ -25,6 +25,7 @@ class Drive{
         void turnL(int speed);
         void sTurnR(int speed);
         void sTurnL(int speed);
+        void turn(float degree, int speed);
 
     private:
 

@@ -32,7 +32,7 @@ void loop() {
   }
 
   if(runState){
-    drive.sTurnR(100);
+    drive.turn(45,100);
     delay(5000);
     drive.stop();
     while(1);

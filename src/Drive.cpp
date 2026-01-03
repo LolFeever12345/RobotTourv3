@@ -173,4 +173,33 @@ void Drive::sTurnR(int speed){
     stop();
 }
 
-
+void Drive::turn(float degree, int speed){
+    reset();
+    Lcon.reset();
+    Rcon.reset();
+    unsigned long prevTime = millis();
+    float currDistanceLeft = 0.f;
+    float currDistanceRight = 0.f;
+    unsigned long now = millis();
+    unsigned long start = millis();
+    float dt = (now-prevTime)/1000.f;
+    while(abs(currDistanceLeft) < abs((wBase*PI)* degree/360.f) && abs(currDistanceRight) < abs((wBase*PI)* degree/360.f)){
+        dt = (now-prevTime)/1000.f;
+        if(dt>= 0.1f){
+            Lmotor.drive(Lcon.output(Lenc,speed,dt));
+            Rmotor.drive(Rcon.output(Renc,speed*-1,dt));
+            prevTime = now;
+            currDistanceLeft = Lenc.read()*Lcon.MPC;
+            currDistanceRight = Renc.read()*Rcon.MPC;
+            Serial.print(now-start);Serial.print(",");
+            Serial.print(Lcon.aSpeed);Serial.print(",");
+            Serial.print(Rcon.aSpeed);Serial.print(",");
+            Serial.print(speed);Serial.print(",");
+            Serial.print(speed*-1);Serial.print(",");
+            Serial.print(currDistanceLeft);Serial.print(",");
+            Serial.println(currDistanceRight);
+        }
+        now = millis();
+    }
+    stop();
+}
