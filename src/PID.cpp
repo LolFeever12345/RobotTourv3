@@ -3,13 +3,13 @@
 #include <Encoder.h>
 #include <Arduino.h>
 
-PID::PID(float Kp, float Ki, float Kd, float wheelBase){
+PID::PID(float Kp, float Ki, float Kd, float wheelBase, float GR, float CPR){
     this->Kp = Kp;
     this->Ki = Ki;
     this->Kd = Kd;
     aSpeed = 0.0;
     wBase = wheelBase;
-    MPC = (PI*wBase)/909.72; 
+    MPC = (PI*wBase)/(GR*CPR); 
 }
 
 

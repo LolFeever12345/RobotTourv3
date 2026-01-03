@@ -6,7 +6,7 @@
 
 class PID{
     public:
-        PID(float Kp, float Ki, float Kd, float wheelBase);
+        PID(float Kp, float Ki, float Kd, float wheelBase, float GearRatio, float CPR);
         int output(Encoder& enc, int speed, float dt);
         void reset();
 
