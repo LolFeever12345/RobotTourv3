@@ -3,17 +3,20 @@
 #include <Arduino.h>
 #include <Encoder.h>
 #include "PID.h"
+#include <Adafruit_MPU6050.h>
+#include <Adafruit_Sensor.h>
 
 class Drive{
     public:
         
-        Drive(PID& Lcon, PID& Rcon, Motor& Lmotor,Motor& Rmotor, Encoder& Lenc, Encoder& Renc, float wheelBase, float wheelDiameter): 
+        Drive(PID& Lcon, PID& Rcon, Motor& Lmotor,Motor& Rmotor, Encoder& Lenc, Encoder& Renc, Adafruit_MPU6050& mpu6050, float wheelBase, float wheelDiameter): 
             Lcon(Lcon),
             Rcon(Rcon),
             Rmotor(Rmotor),
             Lmotor(Lmotor),
             Lenc(Lenc),
-            Renc(Renc)
+            Renc(Renc),
+            mpu(mpu6050)                                                                                            
     {
         wBase = wheelBase;
         wDiameter = wheelDiameter;
@@ -26,6 +29,7 @@ class Drive{
         void sTurnR(int speed);
         void sTurnL(int speed);
         void turn(float degree, int speed);
+        void begin();
 
     private:
 
@@ -35,11 +39,13 @@ class Drive{
         Motor& Lmotor;
         Encoder& Lenc;
         Encoder& Renc;
+        Adafruit_MPU6050& mpu;
 
 
         unsigned long now;
         float wBase;
         float wDiameter;
+        float bias = 0.01f;
 
         uint8_t startPWM(int linSpeed);
 
