@@ -146,9 +146,12 @@ void Drive::sTurnL(int speed){
     unsigned long start = millis();
     float dt = (now-prevTime)/1000.f;
 
-    while(heading<PI/2-0.01f){
+    while(abs(heading)<PI/2){
         mpu.getEvent(&a, &g, &temp);
         dt = (now-prevTime)/1000.f;
+        if(abs(heading) > (PI/2.f)*0.8){
+            speed = constrain(speed/2,50,speed);
+        }
         if(dt>= 0.02f){
             Lmotor.drive(Lcon.output(Lenc,speed*-1,dt));
             Rmotor.drive(Rcon.output(Renc,speed,dt));
@@ -178,9 +181,12 @@ void Drive::sTurnR(int speed){
     unsigned long start = millis();
     float dt = (now-prevTime)/1000.f;
 
-    while(heading<PI/2-0.01f){
+    while(abs(heading)<PI/2){
         mpu.getEvent(&a, &g, &temp);
         dt = (now-prevTime)/1000.f;
+        if(abs(heading) > (PI/2.f)*0.8){
+            speed = constrain(speed/2,50,speed);
+        }
         if(dt>= 0.02f){
             Lmotor.drive(Lcon.output(Lenc,speed,dt));
             Rmotor.drive(Rcon.output(Renc,speed*-1,dt));
@@ -217,7 +223,7 @@ void Drive::turn(float degree, int speed){
         mpu.getEvent(&a, &g, &temp);
         now = millis();
         dt = (now-prevTime)/1000.f;
-        if(heading > degree*(PI/180.f)*0.8){
+        if(abs(heading) > degree*(PI/180.f)*0.8){
             speed = constrain(speed/2,50,speed);
         }
         if(dt>= 0.02f){
