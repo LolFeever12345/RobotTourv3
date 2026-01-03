@@ -20,7 +20,7 @@ void Drive::driveDistance(float distance, int speed){
             Rmotor.drive(Rcon.output(Renc,speed,dt));
             prevTime = now;
             currDistance = (Lenc.read()*Lcon.MPC+Renc.read()*Rcon.MPC)/2.f;
-            Serial.print(now-start);Serial.print(",");
+            Serial.print((now-start)/1000.f);Serial.print(",");
             Serial.print(Lcon.aSpeed);Serial.print(",");
             Serial.print(Rcon.aSpeed);Serial.print(",");
             Serial.print(speed);Serial.print(",");
@@ -57,7 +57,7 @@ void Drive::turnL(int speed){
     unsigned long now = millis();
     unsigned long start = millis();
     float dt = (now-prevTime)/1000.f;
-    while(currDistanceLeft < 475.951287f && currDistanceRight < 309.4468764f){
+    while(currDistanceLeft < (250+wBase/2.f)*(PI/2.f) && currDistanceRight < (250-wBase/2.f)*(PI/2.f)){
         dt = (now-prevTime)/1000.f;
         if(dt>= 0.1f){
             Lmotor.drive(Lcon.output(Lenc,speed*1.54,dt));
@@ -79,6 +79,8 @@ void Drive::turnL(int speed){
 }
 
 void Drive::turnR(int speed){
+    Serial.println((250-wBase/2.f)*(PI/2.f));
+    Serial.println((250+wBase/2.f)*(PI/2.f));
     reset();
     Lcon.reset();
     Rcon.reset();
@@ -88,7 +90,7 @@ void Drive::turnR(int speed){
     unsigned long now = millis();
     unsigned long start = millis();
     float dt = (now-prevTime)/1000.f;
-    while(currDistanceLeft < 475.951287f && currDistanceRight < 309.4468764f){
+    while(currDistanceLeft < (250-wBase/2.f)*(PI/2.f) && currDistanceRight < (250+wBase/2.f)*(PI/2.f)){
         dt = (now-prevTime)/1000.f;
         if(dt>= 0.1f){
             Lmotor.drive(Lcon.output(Lenc,speed*1.54f,dt));
@@ -119,7 +121,7 @@ void Drive::sTurnL(int speed){
     unsigned long now = millis();
     unsigned long start = millis();
     float dt = (now-prevTime)/1000.f;
-    while(abs(currDistanceLeft) < 83.25220532f && abs(currDistanceRight) < 83.25220532f){
+    while(abs(currDistanceLeft) < (wBase*PI)/4.f && abs(currDistanceRight) < (wBase*PI)/4.f){
         dt = (now-prevTime)/1000.f;
         if(dt>= 0.1f){
             Lmotor.drive(Lcon.output(Lenc,speed*-1,dt));
@@ -150,7 +152,7 @@ void Drive::sTurnR(int speed){
     unsigned long now = millis();
     unsigned long start = millis();
     float dt = (now-prevTime)/1000.f;
-    while(abs(currDistanceLeft) < 83.25220532f && abs(currDistanceRight) < 83.25220532f){
+    while(abs(currDistanceLeft) < (wBase*PI)/4.f && abs(currDistanceRight) < (wBase*PI)/4.f){
         dt = (now-prevTime)/1000.f;
         if(dt>= 0.1f){
             Lmotor.drive(Lcon.output(Lenc,speed,dt));

@@ -6,11 +6,11 @@
 
 class PID{
     public:
-        PID(float Kp, float Ki, float Kd);
+        PID(float Kp, float Ki, float Kd, float wheelBase);
         int output(Encoder& enc, int speed, float dt);
         void reset();
 
-        const float MPC = (PI*40.f)/909.72; // mm/count
+        float MPC; // mm/count
         float aSpeed;
     private:
         float Kp;
@@ -21,6 +21,8 @@ class PID{
         float integral = 0.f;
         float prev_error = 0.f;
         float prevDistance = 0.f;
+
+        float wBase;
 
 };
 

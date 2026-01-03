@@ -7,14 +7,17 @@
 class Drive{
     public:
         
-        Drive(PID& Lcon, PID& Rcon, Motor& Lmotor,Motor& Rmotor, Encoder& Lenc, Encoder& Renc): 
+        Drive(PID& Lcon, PID& Rcon, Motor& Lmotor,Motor& Rmotor, Encoder& Lenc, Encoder& Renc, float wheelBase, float wheelDiameter): 
             Lcon(Lcon),
             Rcon(Rcon),
             Rmotor(Rmotor),
             Lmotor(Lmotor),
             Lenc(Lenc),
             Renc(Renc)
-    {}
+    {
+        wBase = wheelBase;
+        wDiameter = wheelDiameter;
+    }
         void driveDistance(float distance, int speed);
         void stop();
         void reset();
@@ -34,6 +37,8 @@ class Drive{
 
 
         unsigned long now;
+        float wBase;
+        float wDiameter;
 
         uint8_t startPWM(int linSpeed);
 

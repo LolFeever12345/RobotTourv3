@@ -3,15 +3,15 @@
 #include "PID.h"
 #include "Drive.h"
 
-Encoder Rencoder(3,5);
-Motor Rmotor(8,9,11);
-Encoder Lencoder(2,4);
-Motor Lmotor(6,7,10);
-PID right(0.1, 0.999, 0.0);
-PID left(0.1, 1.03, 0.0);
+Encoder Rencoder(3 /*Encoder Pin A*/, 5 /*Encoder Pin B*/);
+Motor Rmotor(8 /*IN1*/, 9 /*IN2*/, 11 /*ENA*/);
+Encoder Lencoder(2 /*Encoder Pin A*/, 4 /*Encoder Pin B*/);
+Motor Lmotor(6 /*IN3*/ , 7 /*IN4*/ ,10 /*ENB*/);
+PID right(0.1f/*Kp*/, 0.999f/*Ki*/, 0.f/*Kd*/, 40.f/*Diameter of the wheels*/);
+PID left(0.1f/*Kp*/, 1.03f/*Ki*/, 0.f/*Kd*/, 40.f)/*Diameter of the wheels*/;
 uint8_t buttonState;
 
-Drive drive(left, right, Lmotor, Rmotor, Lencoder, Rencoder);
+Drive drive(left, right, Lmotor, Rmotor, Lencoder, Rencoder, 106 /* The distance between the wheels*/, 40 /* The diameter of the wheels*/);
 
 
 void setup() {
@@ -32,9 +32,7 @@ void loop() {
   }
 
   if(runState){
-    drive.driveDistance(500,100);
-    drive.turnR(100);
-    drive.driveDistance(500,100);
+    drive.sTurnR(100);
     delay(5000);
     drive.stop();
     while(1);
